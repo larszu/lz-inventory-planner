@@ -21,6 +21,7 @@
 // auf dem Rad — die mittlere Taste wird nirgends gebraucht.
 // ───────────────────────────────────────────────────────────────────────────
 import { Suspense, useMemo, useState } from 'react'
+import { useTokenFarbe } from '../useTokenFarbe'
 import { useT } from '../../i18n'
 import { Canvas } from '@react-three/fiber'
 import { Edges, OrbitControls, TransformControls } from '@react-three/drei'
@@ -201,6 +202,7 @@ function Stueck({
  * galt schon für den Quader und gilt für die Rundung erst recht.
  */
 function Laderaum({ vehicle }: { vehicle: Vehicle }) {
+  const bodenFarbe = useTokenFarbe('--leise')
   const { ringe, senkrechte, boden, raum } = useMemo(() => {
     const raum = raumMasse(vehicle)
     const hoehen = konturHoehen(vehicle)
@@ -257,7 +259,7 @@ function Laderaum({ vehicle }: { vehicle: Vehicle }) {
       {/* Ladefläche — in der Form des Bodens und nicht als Rechteck. */}
       <mesh position={[0, -mm(raum.y) / 2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <shapeGeometry args={[boden]} />
-        <meshStandardMaterial color="#24405F" side={THREE.DoubleSide} />
+        <meshStandardMaterial color={bodenFarbe} transparent opacity={0.35} side={THREE.DoubleSide} />
       </mesh>
     </>
   )
@@ -281,6 +283,7 @@ function Laderaum({ vehicle }: { vehicle: Vehicle }) {
  * aus wie eine, die stimmt.
  */
 function Schwerpunktmarke({ plan, raum }: { plan: LoadPlan; raum: Vec3 }) {
+  const linie = useTokenFarbe('--text-stark')
   const sp = useMemo(() => schwerpunkt(plan), [plan])
   if (!sp.bekannt) return null
 
@@ -301,9 +304,9 @@ function Schwerpunktmarke({ plan, raum }: { plan: LoadPlan; raum: Vec3 }) {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[linien, 3]} />
       </bufferGeometry>
-      {/* Off-White wie die Zielmarke: die Linie trägt, nicht die Farbe. Rot
-          gehört der Öffnung, und ein zweiter Punkt nähme beiden den Rang. */}
-      <lineBasicMaterial color="#F6F5F0" />
+      {/* Die starke Textfarbe des Modus: die Linie trägt, nicht die Farbe.
+          Rot gehört der Öffnung, und ein zweiter Punkt nähme beiden den Rang. */}
+      <lineBasicMaterial color={linie} />
     </lineSegments>
   )
 }
@@ -337,6 +340,7 @@ function Szene({
   // zwischen Kiste und Radkasten hin- und herspringen.
   const [einbauGriff, setEinbauGriff] = useState<THREE.Group | null>(null)
   const [einbauAuswahl, setEinbauAuswahl] = useState<number | null>(null)
+  const oeffnungFarbe = useTokenFarbe('--text-stark')
   const [zieht, setZieht] = useState(false)
   const [urteil, setUrteil] = useState<PlatzUrteil | null>(null)
   const gewaehlt = plan.placements.find((p) => p.stueckId === auswahl)
@@ -388,7 +392,7 @@ function Szene({
               Innenraum abgedunkelt. Der Rahmen sagt dasselbe und nimmt
               nichts weg. Das Signal für die Öffnung trägt die Draufsicht. */}
           <meshBasicMaterial visible={false} />
-          <Edges threshold={15} color="#F6F5F0" />
+          <Edges threshold={15} color={oeffnungFarbe} />
         </mesh>
       )}
 
@@ -595,7 +599,8 @@ export default function Ladeansicht3D(props: Props) {
         camera={{ position: blick.position, fov: FOV_GRAD, near: 0.05, far: 200 }}
         onPointerMissed={() => props.onWaehle(undefined)}
       >
-        <color attach="background" args={['#132040']} />
+        {/* Kein eigener Hintergrund: die Leinwand ist durchsichtig, die
+            Flaeche dahinter (`.ladeansicht-3d`) folgt Hell und Dunkel. */}
         <Suspense fallback={null}>
           <Szene {...props} freiX={freiX} freiZ={freiZ} onUrteil={setUrteil} />
         </Suspense>
