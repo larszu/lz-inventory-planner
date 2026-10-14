@@ -55,7 +55,10 @@ eingetragen, wo er erkennbar ist.
 ausgeliefert mit der Web-Seite unter `https://larszu.github.io/lz-inventory-planner/ladeplanung/`.
 Bild: 3D-Ansicht eines gepackten Fiat Ducato L3H2 aus der App (Maße aus dem
 Katalog, Cases aus den mitgelieferten Vorlagen), hell (`ducato-l3h2-3d.png`)
-und dunkel (`ducato-l3h2-3d-dunkel.png`, per `prefers-color-scheme`). Ein Sprinter steht nicht im
+und dunkel (`ducato-l3h2-3d-dunkel.png`). Die Seite folgt der Optik der App
+(Hell und Dunkel, Umschalter Auto · Hell · Dunkel oben rechts; die Wahl teilt
+sie sich mit der App über `inventory-planner:thema`), Bild und Logo wechseln
+mit dem Modus. Ein Sprinter steht nicht im
 Katalog — ohne Datenblatt-Quelle kommt er dort nicht hinein.
 
 Drei Werte in `public/ladeplanung/konfiguration.js`: Checkout-Link, Testende,
