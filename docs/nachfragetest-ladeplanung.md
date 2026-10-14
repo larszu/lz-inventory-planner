@@ -54,7 +54,8 @@ eingetragen, wo er erkennbar ist.
 `public/ladeplanung/` — englisch (`index.html`) und deutsch (`de.html`),
 ausgeliefert mit der Web-Seite unter `https://larszu.github.io/lz-inventory-planner/ladeplanung/`.
 Bild: 3D-Ansicht eines gepackten Fiat Ducato L3H2 aus der App (Maße aus dem
-Katalog, Cases aus den mitgelieferten Vorlagen). Ein Sprinter steht nicht im
+Katalog, Cases aus den mitgelieferten Vorlagen), hell (`ducato-l3h2-3d.png`)
+und dunkel (`ducato-l3h2-3d-dunkel.png`, per `prefers-color-scheme`). Ein Sprinter steht nicht im
 Katalog — ohne Datenblatt-Quelle kommt er dort nicht hinein.
 
 Drei Werte in `public/ladeplanung/konfiguration.js`: Checkout-Link, Testende,

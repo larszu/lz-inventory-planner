@@ -26,6 +26,7 @@ import { useMemo } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Edges, OrbitControls } from '@react-three/drei'
 import { useT } from '../i18n'
+import { useTokenFarbe } from './useTokenFarbe'
 import { useInventoryStore } from '../domain/store/inventoryStore'
 import { itemsInNode } from '../domain/lib/storageTree'
 import { hallenUmriss } from '../domain/lib/hallenumriss'
@@ -46,6 +47,7 @@ export default function Lagerraum3D({ beschriftung }: Props) {
   const nodes = useInventoryStore((s) => s.nodes)
   const items = useInventoryStore((s) => s.items)
 
+  const bodenFarbe = useTokenFarbe('--leise')
   const gestellt = useMemo(() => nodes.filter((n) => n.stellplatz), [nodes])
   const ohneHoehe = gestellt.filter((n) => !n.stellplatz!.hoeheMm)
 
@@ -100,7 +102,7 @@ export default function Lagerraum3D({ beschriftung }: Props) {
               vermessen hat. */}
           <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
             <planeGeometry args={[mm(mitte.breite), mm(mitte.tiefe)]} />
-            <meshStandardMaterial color="#24405F" />
+            <meshStandardMaterial color={bodenFarbe} transparent opacity={0.35} />
           </mesh>
 
           {gestellt.map((n) => {
