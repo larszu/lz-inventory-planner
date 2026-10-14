@@ -19,8 +19,8 @@
 // Der Dialog ist eine FLÄCHE und keine Karte: kein Radius, kein Schatten,
 // Kopflinie oben, Aktionen unten rechts (ADR-007 Abschnitt 6).
 // ───────────────────────────────────────────────────────────────────────────
-import { useEffect, useState } from 'react'
-import { liesThema, setzeThema, type Thema } from '../lib/thema'
+import { useEffect } from 'react'
+import { setzeThema, useThema, type Thema } from '../lib/thema'
 import { useT, type Sprache } from '../i18n'
 import { BibliothekKonto } from './BibliothekKonto'
 import { Hauptlogo } from './Marke'
@@ -43,7 +43,7 @@ const SPRACHEN: { id: Sprache; titel: string }[] = [
 
 export function Einstellungen({ onClose }: { onClose: () => void }) {
   const { t, sprache, setzeSprache } = useT()
-  const [thema, setThema] = useState<Thema>(liesThema)
+  const thema = useThema()
   const WAHL = themaWahl(t)
 
   useEffect(() => {
@@ -94,10 +94,7 @@ export function Einstellungen({ onClose }: { onClose: () => void }) {
                   type="radio"
                   name="thema"
                   checked={thema === w.id}
-                  onChange={() => {
-                    setThema(w.id)
-                    setzeThema(w.id)
-                  }}
+                  onChange={() => setzeThema(w.id)}
                 />
                 <span>
                   {w.titel}

@@ -33,6 +33,15 @@ import { resolve } from 'node:path'
 // steht auf Deutsch plötzlich englisch da, und das fällt sonst erst dem
 // Nutzer auf.
 //
+// ─── SEIT DEM 2026-10-13: NEUE OPTIK, GLEICHE STRUKTUR ────────────────────
+//
+// Das geaenderte ADR-007 (lz-planner-suite, Design-Vertrag Oktober 2026)
+// tauscht nur die Optik: Glas statt Navy-Flaeche, Pill-Knoepfe, keine
+// Kopflinie. Hoehe, Menues links und Einstellungen rechts aussen bleiben —
+// genau das misst dieser Lauf weiter. Neu dazu: der Umschalter Auto · Hell ·
+// Dunkel sitzt in der rechten Gruppe, VOR dem Einstellungen-Knopf, damit
+// dieser der letzte Bedienpunkt der Zeile bleibt.
+//
 // ─── WAS ER NICHT KANN ────────────────────────────────────────────────────
 //
 // Er liest Quelltext. Ob der Knopf im Fenster wirklich rechts aussen sitzt,
@@ -65,6 +74,14 @@ describe('die Kopfzeile hat das Mass der Suite', () => {
     const j = kopf.indexOf("title={t('settings.title'")
     expect(i, 'keine rechte Gruppe im Markup').toBeGreaterThan(0)
     expect(j, 'kein Einstellungen-Knopf').toBeGreaterThan(i)
+  })
+
+  it('der Theme-Umschalter steht rechts, VOR den Einstellungen', () => {
+    const i = kopf.indexOf('kopf-rechts')
+    const u = kopf.indexOf('<ThemaUmschalter />')
+    const j = kopf.indexOf("title={t('settings.title'")
+    expect(u, 'kein Theme-Umschalter in der rechten Gruppe').toBeGreaterThan(i)
+    expect(u, 'der Umschalter steht hinter den Einstellungen').toBeLessThan(j)
   })
 })
 

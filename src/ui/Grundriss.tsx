@@ -306,8 +306,7 @@ export function Grundriss({ beschriftung }: GrundrissProps) {
               y={halle.zMm}
               width={halle.breiteMm}
               height={halle.tiefeMm}
-              fill="#24405F"
-              stroke="#8C9CB3"
+              style={{ fill: 'var(--flaeche-2)', stroke: 'var(--leise)' }}
               strokeWidth={Math.max(20, halle.breiteMm / 400)}
               strokeDasharray={halle.vermessen ? undefined : '200 160'}
             />
