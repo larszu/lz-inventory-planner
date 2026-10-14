@@ -20,3 +20,26 @@
     kontakt.hidden = false
   }
 })()
+
+// Auto · Hell · Dunkel. Derselbe Schluessel wie die App (gleiche Herkunft),
+// damit eine Wahl an beiden Stellen gilt. Auto entfernt das Attribut.
+;(function () {
+  var SCHLUESSEL = 'inventory-planner:thema'
+  var knoepfe = document.querySelectorAll('.themen button')
+  var zeige = function (t) {
+    knoepfe.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.thema === t)) })
+  }
+  var jetzt = 'system'
+  try { jetzt = localStorage.getItem(SCHLUESSEL) || 'system' } catch (e) {}
+  if (jetzt !== 'hell' && jetzt !== 'dunkel') jetzt = 'system'
+  zeige(jetzt)
+  knoepfe.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = b.dataset.thema
+      if (t === 'system') delete document.documentElement.dataset.thema
+      else document.documentElement.dataset.thema = t
+      try { localStorage.setItem(SCHLUESSEL, t) } catch (e) {}
+      zeige(t)
+    })
+  })
+})()
