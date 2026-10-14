@@ -13,7 +13,14 @@
 // friert die erste Messung ein, und ein späterer Wechsel am Betriebssystem
 // käme nie an.
 // ───────────────────────────────────────────────────────────────────────────
+import { useSyncExternalStore } from 'react'
+
 export type Thema = 'system' | 'hell' | 'dunkel'
+
+// Zwei Stellen schalten dasselbe: der Umschalter in der Kopfzeile und die
+// Wahl in den Einstellungen. Beide hoeren hier zu, damit keine von beiden
+// einen veralteten Stand zeigt.
+const hoerer = new Set<() => void>()
 
 // Eigener Schluessel neben `STORAGE_KEYS` und nicht darin: das dort ist der
 // BESTAND und was zu ihm gehoert. Eine Ansichts-Vorliebe gehoert dem Geraet,
@@ -39,7 +46,18 @@ export const setzeThema = (t: Thema): void => {
     /* siehe oben */
   }
   wendeAn(t)
+  hoerer.forEach((h) => h())
 }
+
+const abonniere = (h: () => void) => {
+  hoerer.add(h)
+  return () => {
+    hoerer.delete(h)
+  }
+}
+
+/** Die aktuelle Wahl als React-Zustand — fuer Kopfzeile und Einstellungen. */
+export const useThema = (): Thema => useSyncExternalStore(abonniere, liesThema, () => 'system')
 
 /** Schreibt die Entscheidung an den Wurzelknoten; das Stilblatt liest sie. */
 export const wendeAn = (t: Thema): void => {

@@ -1,10 +1,11 @@
-import signetOffwhite from '../assets/brand/lzm_signet_offwhite.svg'
-import signetNavy from '../assets/brand/lzm_signet_navy.svg'
+import signetOffwhite from '../assets/brand/lzm_signet_offwhite_tally.svg'
+import signetNavy from '../assets/brand/lzm_signet_navy_tally.svg'
 import hauptlogoOffwhite from '../assets/brand/lzm_hauptlogo_offwhite.svg'
 import hauptlogoNavy from '../assets/brand/lzm_hauptlogo_navy.svg'
 
-/* Das Signet ohne Tally-Punkt: der Blockkopf darunter traegt schon Rot, und
- * pro Sichtfeld gibt es nur eines. */
+/* Das Signet in Kit-Farben: Navy auf Hell, Off-White auf Dunkel, der Punkt
+ * immer Tally-Rot (seit 2026-10-13 — die rote Kopflinie, die vorher das eine
+ * Rot im Sichtfeld war, gibt es nicht mehr). Nie an `--akzent` gekoppelt. */
 
 /** Beide Farbfassungen stehen im Markup; das Stilblatt zeigt die zum Thema passende. */
 function Zweifach({ dunkel, hell, className }: { dunkel: string; hell: string; className: string }) {

@@ -40,6 +40,7 @@ import { herunterladen } from '../lib/herunterladen'
 import { useT } from '../i18n'
 import { Menue, MenuePunkt, MenueTrenner } from './Menue'
 import { Einstellungen } from './Einstellungen'
+import { ThemaUmschalter } from './ThemaUmschalter'
 import { Signet } from './Marke'
 import { APP_NAME } from '../lib/appName'
 import { useInventoryStore } from '../domain/store/inventoryStore'
@@ -99,7 +100,7 @@ export function Kopfzeile() {
       <header className="kopf">
         <span className="marke">
           <Signet />
-          {APP_NAME}
+          <span className="marke-name">{APP_NAME}</span>
         </span>
 
         <Menue label={t('menu.file', 'File')}>
@@ -159,6 +160,7 @@ export function Kopfzeile() {
             wie im Cable Planner. Das Wort ab breiteren Fenstern, darunter nur
             das Zeichen, damit die Zeile auf schmalen nicht bricht. */}
         <div className="kopf-rechts">
+          <ThemaUmschalter />
           <button
             type="button"
             className="kopf-knopf"

@@ -98,9 +98,10 @@ Die Pakete heißen `LZ-Inventory-Planner-Setup-<version>.exe`,
 
 **Erscheinungsbild.** App-Symbol in `build/` (`icon.svg` ist die Vorlage,
 `icon.png`/`icon.ico` gehen in die Pakete), Favicon, Touch-Icon und
-Web-Manifest in `public/`. Die Kopfzeile trägt das Signet „lz" ohne Tally-Punkt (ein Rot pro Sichtfeld), Hilfe → Über
-das Hauptlogo; beide Zeichen liegen als Originalkonturen aus dem Brand Kit 2.0
-unter `src/assets/brand/` und folgen dem Thema (Off-White dunkel, Navy hell).
+Web-Manifest in `public/`. Die Kopfzeile trägt das Signet „lz." mit
+Tally-Punkt, Hilfe → Über das Hauptlogo; beide Zeichen liegen als
+Originalkonturen aus dem Brand Kit 2.0 unter `src/assets/brand/` und folgen dem
+Modus (Navy auf Hell, Off-White auf Dunkel, der Punkt immer Tally-Rot).
 
 **Die Web-Seite** steht unter https://larszu.github.io/lz-inventory-planner/;
 `pages.yml` veröffentlicht sie bei jedem Push auf `main`.
@@ -124,6 +125,10 @@ ist es vorausgewählt. Stücke ohne Maße fahren mit und stehen unter „No plac
 in the plan yet" — die Maße lassen sich dort direkt eintragen und landen am
 Case bzw. am Artikel. Ein Fahrzeug braucht nur seinen Laderaum; ohne Namen
 heißt es wie seine Klasse, und das Formular sagt, was fehlt.
+
+Rechts in der Kopfzeile schaltet ein Segment **Auto · Hell · Dunkel** (Auto
+folgt dem Betriebssystem, die Wahl bleibt gespeichert); dieselbe Wahl steht in
+den Einstellungen. Daneben, ganz rechts, die Einstellungen.
 
 Oben stehen fünf **Bereiche**, darunter die Ansichten des gewählten Bereichs
 in der Reihenfolge der Arbeit:
@@ -880,25 +885,38 @@ Der Client `src/lib/deviceLibraryClient.ts` ist eine unveränderte Kopie aus
 ## Marke
 
 Die Oberfläche folgt dem Corporate Design der **Lars Zumpe Medienproduktion**
-(Brand Guide 2.0) und damit ADR-007 der Suite: Deep Navy als Grund, Zumpe Navy
-als Fläche, Off-White und Eisblau als Schrift, Stahlblau für Meta — **keine
-Rundungen, keine Schatten, keine Verläufe**. Struktur entsteht durch die
-Linie, Bedeutung durch den Punkt.
+(Brand Guide 2.0) in der UI-Fassung vom Oktober 2026 (`lzm-web`, ADR-007 der
+Suite) — mit denselben Werten wie der Cable Planner:
 
-**Tally-Rot ist Signal und sonst nichts:** der Punkt im Primärknopf, der
-Fokusring, die Öffnungskante in der Draufsicht. Nie Fläche, nie Text, nie
-Rahmen — und nie zweimal in einem Sichtfeld. Die Meldefarben (`--warn`,
-`--gefahr`, `--ok`) sind ausdrücklich **nicht** dasselbe; wer eine Warnung in
-Tally-Rot setzt, nimmt dem Aufnahmelicht seine Bedeutung.
+- **Hell und Dunkel, gleich sorgfältig.** Flächen sind neutral: warmes
+  Fast-Weiß (`#FAFAF8`, Karten `#FFFFFF`) bzw. Anthrazit (`#1E1F23`, Karten
+  `#28292E`) — kein Navy als Fläche. Alle Werte stehen einmal als Token in
+  `src/index.css`, beide Modi per `light-dark()` in derselben Zeile.
+- **Markenblau nur als Akzent:** Hauptknopf, Auswahl, Fortschritt, Links
+  (Zumpe Navy auf Hell, helles Markenblau `#B9C7D8` auf Dunkel).
+- **Weiche Formen, ruhige Tiefe:** Karten mit Haarlinie, Radius 20 px und
+  leichtem Schatten; Pill-Knöpfe, der eine Hauptknopf je Ansicht gefüllt im
+  Akzent; Dialoge mit Radius 24 px, mobil als Sheet von unten. Rundungen und
+  Schatten kommen nur aus Tokens (`--r-*`, `--schatten-*`).
+- **Glas-Kopfzeile** (40 px, sticky, weichgezeichnet); Bereiche als Pills,
+  Ansichten als Segment. Ein weicher Hintergrundschein nur auf Start.
+- **Tabellen werden mobil zu Karten** (unter 700 px), Beschriftung links.
+- **Satzschreibung überall**; Versalien nur für kleine Overlines.
 
-**Der Druckbogen ist die helle Anwendung derselben Palette** (Print 60 %
-Off-White, Web 70 % Deep Navy — dieselben Farben, gedrehte Gewichtung), mit
-Kicker und Kopflinie und ohne Rot. Hausschrift ist **Public Sans**; sie wird
-nicht aus dem Netz geladen, weil dieses Repo offline-first ist, sondern
-zuerst genannt und dann auf die Kette des Handbuchs zurückgefallen.
+**Tally-Rot ist Signal und sonst nichts:** Fokusring, Claim-Punkt im Signet,
+die Öffnungskante in der Draufsicht. Nie Fläche, nie Text, nie Rahmen. Die
+Meldefarben (`--warn`, `--gefahr`, `--ok`) sind ausdrücklich **nicht**
+dasselbe.
 
-Gemessen wird das von `markenPalette.node.test.ts` — Token-Schicht, Druckbogen,
-Schrift und die Regel „ein Signal pro Abschnitt".
+**Der Druckbogen ist Papier** und bleibt in der Print-Anwendung der Palette
+(Off-White, Navy-Schrift, Kicker und Kopflinie, ohne Rot). Hausschrift ist
+**Public Sans**, lokal ausgeliefert über `@fontsource-variable/public-sans` —
+kein Netz, offline-first.
+
+Gemessen wird das von `markenPalette.node.test.ts` — Token-Werte in beiden
+Modi, Rundung/Schatten nur über Tokens, kein rohes Hex außerhalb der
+Token-Schicht, Signal genau einmal, Logo in Kit-Farben, Theme-Umschalter
+vorhanden — und von `kopfzeile.node.test.ts` (Aufbau der Kopfzeile).
 
 ## Stand
 

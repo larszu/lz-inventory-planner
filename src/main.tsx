@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { App } from './ui/App'
 import { liesThema, wendeAn } from './lib/thema'
+import '@fontsource-variable/public-sans'
 import './index.css'
 
 // VOR dem ersten Rendern, nicht danach. Wer die Entscheidung erst in einem

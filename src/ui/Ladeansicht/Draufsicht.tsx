@@ -212,7 +212,7 @@ export function Draufsicht({
       onPointerLeave={() => setZug(null)}
     >
       {/* Der Laderaum am BODEN — der Umriss und nicht das Rechteck. */}
-      <polygon points={alsPfad(boden)} fill="#24405F" stroke="#8C9CB3" strokeWidth={6} />
+      <polygon points={alsPfad(boden)} style={{ fill: 'var(--flaeche-2)', stroke: 'var(--leise)' }} strokeWidth={6} />
 
       {/* Das Packmass-Raster, fein und leise: es ist ein Hintergrund und
           keine Aussage. Wer eine Kiste darauf stehen sieht, hat die Antwort
@@ -222,7 +222,7 @@ export function Draufsicht({
           durchs Fahrzeug, in der Länge läuft sie durch. Ein Netz zeichnete
           eine Teilung, nach der der Packer gar nicht setzt. */}
       {gitterMm > 0 && (
-        <g stroke="#8C9CB3" strokeWidth={3} opacity={0.5}>
+        <g style={{ stroke: 'var(--leise)' }} strokeWidth={3} opacity={0.5}>
           {/* Eine Linie WENIGER als Teilungen: die letzte läge auf der Wand,
               und eine Linie auf der Wand teilt nichts. */}
           {Array.from({ length: Math.ceil(raum.x / gitterMm) - 1 }, (_, i) => (
