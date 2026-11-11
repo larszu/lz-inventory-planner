@@ -95,4 +95,8 @@ export const STORAGE_KEYS = {
   deviceLibraryToken: 'inventory-planner:deviceLibraryToken',
   /** Der zuletzt offene Reiter. Nur Bequemlichkeit: fehlt er, oeffnet der Bestand. */
   reiter: 'inventory-planner:reiter',
+  /** Tankungen aller Fahrzeuge. Eigener Schlüssel: Betriebsdaten, keine Stammdaten. */
+  tankbuch: 'inventory-planner:tankbuch',
+  /** Seitenleiste eingeklappt. Nur Bequemlichkeit. */
+  leisteZu: 'inventory-planner:leisteZu',
 } as const
