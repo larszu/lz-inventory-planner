@@ -827,8 +827,13 @@ h1, h2, h3, h4 { color: var(--text-stark); }
    `.zeile .schmal` und nicht `.schmal`: die Regel darueber trifft
    `.zeile label` und hat damit zwei Gewichte gegen eines — eine
    Klassenregel allein verliert gegen sie, egal wie weit unten sie steht.
-   Gemessen: das Mengenfeld lief in der Stufe davor ueber die halbe Zeile. */
-.zeile .schmal,
+   Gemessen: das Mengenfeld lief in der Stufe davor ueber die halbe Zeile.
+
+   `label.schmal` und nicht `.schmal` (#69): die Klasse steht auch am
+   `<input>` IN einem Label. Das Label ist eine Spalte (`flex-direction:
+   column`), dort ist die Flex-Basis die HOEHE — „Lead time" und „Interval"
+   wurden so 7rem hohe graue Flaechen. */
+.zeile label.schmal,
 .zeile .feld.schmal { flex: 0 0 7rem; }
 .schmal > input,
 input.schmal,
