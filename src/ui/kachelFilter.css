@@ -1,0 +1,7 @@
+/* #69: die Kacheln der Fristen-Ampel sind Filter. Knopf-Optik zuruecksetzen,
+   die Kachel behaelt ihr Aussehen; die gewaehlte traegt den Akzentrand.
+   Nur Tokens (ADR-007), keine rohen Werte. */
+.kachel.kachel-filter { font: inherit; color: inherit; text-align: left; cursor: pointer; background: var(--flaeche); }
+.kachel.kachel-filter:disabled { cursor: default; }
+.kachel.kachel-filter.aktiv { border-color: var(--akzent); box-shadow: var(--schatten-2); }
+.liste-schlicht { margin: 0 0 var(--steg-4); padding-left: 1.2em; }
