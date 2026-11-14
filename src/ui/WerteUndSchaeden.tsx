@@ -92,11 +92,13 @@ import {
   fristArtLabel,
   istUnbekannteArt,
 } from '../domain/lib/fristen'
+import { gefilterteFristen, ohneFristEinheiten, type FristFilter } from '../domain/lib/fristFilter'
 import type { Frist, FristArt } from '../domain/types/inventory'
 import { EINGEBAUTE_FRIST_ARTEN } from '../domain/types/inventory'
 import { toCsv, type CsvTable } from '../lib/csv'
 import { useT } from '../i18n'
 import { TabelleRahmen } from './TabelleRahmen'
+import './kachelFilter.css'
 
 /** Eine Tabelle als CSV herunterladen. Vier Knöpfe brauchen dasselbe. */
 const csvLaden = (tabelle: CsvTable, name: string) => {
@@ -118,6 +120,10 @@ export function WerteUndSchaeden() {
   // Sie steht als Eingabe da und nicht als Konstante im Code, weil sie eine
   // Entscheidung des Hauses ist und nicht dieser Datei.
   const [vorwarn, setVorwarn] = useState(30)
+  // #69: eine Kachel ist ein Filter. Ein zweiter Klick auf dieselbe Kachel
+  // hebt ihn wieder auf — dann steht die Arbeitsliste wie bisher da.
+  const [fristFilter, setFristFilter] = useState<FristFilter | null>(null)
+  const filterUmschalten = (f: FristFilter) => setFristFilter((alt) => (alt === f ? null : f))
   const [neueArt, setNeueArt] = useState({ name: '', intervall: '', grundlage: '' })
   const [neueFrist, setNeueFrist] = useState<{ unitId: string; art: FristArt; zuletzt: string; intervall: string }>({
     unitId: '',
@@ -226,28 +232,36 @@ export function WerteUndSchaeden() {
         ) : (
           <>
             <div className="kennzahlen">
-              <div className={fristen.ueberfaellig > 0 ? 'kachel achtung' : 'kachel'}>
-                <strong>{fristen.ueberfaellig}</strong>
-                <span>{t('checks.overdue', 'overdue')}</span>
-              </div>
-              <div className="kachel">
-                <strong>{fristen.faellig}</strong>
-                <span>{format(t('checks.dueIn', 'due within {n} days'), { n: vorwarn })}</span>
-              </div>
-              <div className="kachel">
-                <strong>{fristen.ok}</strong>
-                <span>{t('checks.later', 'later')}</span>
-              </div>
-              {/*
-                Die vierte Kachel ist KEINE vierte Lage. Sie zaehlt die
-                Einheiten, ueber die diese Ampel nichts sagt — und ohne sie
-                saehe ein Lager, in dem niemand je eine Frist gepflegt hat,
-                aus wie eines, in dem alles geprueft ist.
-              */}
-              <div className="kachel">
-                <strong>{fristen.ohneFrist}</strong>
-                <span>{t('checks.withoutDate', 'without a stated date')}</span>
-              </div>
+              {(
+                [
+                  ['ueberfaellig', fristen.ueberfaellig, t('checks.overdue', 'overdue'), fristen.ueberfaellig > 0],
+                  ['faellig', fristen.faellig, format(t('checks.dueIn', 'due within {n} days'), { n: vorwarn }), false],
+                  ['ok', fristen.ok, t('checks.later', 'later'), false],
+                  /*
+                    Die vierte Kachel ist KEINE vierte Lage. Sie zaehlt die
+                    Einheiten, ueber die diese Ampel nichts sagt — und ohne sie
+                    saehe ein Lager, in dem niemand je eine Frist gepflegt hat,
+                    aus wie eines, in dem alles geprueft ist.
+                  */
+                  ['ohne', fristen.ohneFrist, t('checks.withoutDate', 'without a stated date'), false],
+                ] as const
+              ).map(([f, n, text, achtung]) => (
+                <button
+                  key={f}
+                  type="button"
+                  className={['kachel', 'kachel-filter', achtung ? 'achtung' : '', fristFilter === f ? 'aktiv' : '']
+                    .filter(Boolean)
+                    .join(' ')}
+                  aria-pressed={fristFilter === f}
+                  // Eine leere Gruppe ist kein Filter: die Kachel mit 0 ist
+                  // nicht waehlbar, solange sie nicht schon gewaehlt ist.
+                  disabled={n === 0 && fristFilter !== f}
+                  onClick={() => filterUmschalten(f)}
+                >
+                  <strong>{n}</strong>
+                  <span>{text}</span>
+                </button>
+              ))}
             </div>
 
             <p className={fristen.ueberfaellig > 0 ? 'warnung' : 'hinweis'}>
@@ -290,7 +304,21 @@ export function WerteUndSchaeden() {
               </label>
             </div>
 
-            {anzugehen(fristen).length === 0 ? (
+            {fristFilter === 'ohne' ? (
+              ohneFristEinheiten(units).length === 0 ? (
+                <p className="hinweis">
+                  {t('checks.coverage.full', 'Every unit carries at least one date; the light covers the whole stock.')}
+                </p>
+              ) : (
+                <ul className="liste-schlicht">
+                  {ohneFristEinheiten(units).map((u) => (
+                    <li key={u.id}>
+                      {unitLabel(u, 'house')} · {modellVon(u)}
+                    </li>
+                  ))}
+                </ul>
+              )
+            ) : anzugehen(fristen).length === 0 && fristFilter === null ? (
               <p className="hinweis">
                 {format(t('checks.allClear', 'Nothing overdue and nothing due within the next {n} days.'), {
                   n: vorwarn,
@@ -311,7 +339,7 @@ export function WerteUndSchaeden() {
                     </tr>
                   </thead>
                   <tbody>
-                    {anzugehen(fristen).map((z) => (
+                    {gefilterteFristen(fristen, fristFilter).map((z) => (
                       <tr key={`${z.unitId}-${z.art}-${z.faellig}`} className={`lage-${z.lage}`}>
                         <td>{z.einheit}</td>
                         <td>{z.model}</td>
