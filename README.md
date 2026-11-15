@@ -1,5 +1,12 @@
 # LZ Inventory Planner
 
+> [!WARNING]
+> **Eingefroren — wird nicht weiter gepflegt.** Die Lager-Logik lebt nur noch in
+> [larszu/cable-planner](https://github.com/larszu/cable-planner) unter
+> [`src/renderer/lager/`](https://github.com/larszu/cable-planner/tree/main/src/renderer/lager).
+> Neue Funktionen und Fehlerbehebungen gehen dorthin; dieses Repo bleibt als
+> Stand erhalten. Siehe [cable-planner#1028](https://github.com/larszu/cable-planner/issues/1028).
+
 > **Equipment inventory and rental warehouse tool for AV and event production** —
 > stock, check-out slips and sub-hire, run by the warehouse crew instead of from
 > inside a cable plan. Offline-first Electron desktop app, part of the
